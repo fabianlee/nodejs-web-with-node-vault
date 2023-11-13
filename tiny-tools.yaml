@@ -1,0 +1,69 @@
+#
+# Used as template for nodeJS app with HashiCorp Vault for secret access
+#
+#export app=nodejs-express-vault
+#export namespace_k8s=vault
+#export service_account_k8s=vault-auth
+#export vault_uri=http://vault.vault.svc.cluster.local:8200
+#export vault_role=myrole
+#export vault_backend=secret; export vault_context=webapp; export vault_profile=config
+#
+# generate:
+# cat tiny-tools.yaml | DOLLAR_SIGN='$' envsubst | kubectl apply -f -
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $app
+  namespace: $namespace_k8s
+  labels:
+    app: $app
+spec:
+  selector:
+    matchLabels:
+      app: $app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: $app
+      annotations:
+        vault.hashicorp.com/agent-inject: 'false'
+    spec:
+      serviceAccountName: $service_account_k8s
+
+      containers:
+      - name: main
+        image: docker.io/fabianlee/nodejs-web-with-node-vault:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+          limits:
+            memory: "256Mi"
+        env:
+        # externalized variables used in Spring application.properties
+        - name: VAULT_URI
+          value: $vault_uri
+        - name: VAULT_BACKEND
+          value: $vault_backend
+        - name: VAULT_CONTEXT
+          value: $vault_context
+        - name: VAULT_PROFILE
+          value: $vault_profile
+        - name: VAULT_ROLE
+          value: $vault_role
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
