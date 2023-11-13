@@ -34,7 +34,8 @@ spec:
 
       containers:
       - name: main
-        image: docker.io/fabianlee/nodejs-web-with-node-vault:latest
+        image: ghcr.io/fabianlee/nodejs-web-with-node-vault:1.0.0
+        #image: docker.io/fabianlee/nodejs-web-with-node-vault:latest
         imagePullPolicy: Always
         resources:
           requests:
