@@ -4,13 +4,13 @@ run-name: Build OCI Image for NodeJS Express application
 
 on:
   push:
-    branches: ['main']
-    #tags: ['v*']
+    #branches: ['main']
+    tags: ['v*']
   #pull_request:
   #  branches: ['main']
 
 env:
-  BUILD_OCI_WITH: docker # docker|buildah
+  BUILD_OCI_WITH: buildah # docker|buildah
   PUSH_TO_DOCKERHUB: false
   PUSH_TO_GITHUBCR: true
   GH_REGISTRY: ghcr.io # Github Container Registry
@@ -81,7 +81,10 @@ jobs:
 
       # (CONDITIONAL) build using buildah
       - name: Execute Gradle build of OCI with Buildah
-        run: ./gradlew buildah -Pversion=${{ steps.getversion.outputs.VERSION }}
+        run: |
+          version=${{ steps.getversion.outputs.VERSION }}
+          echo docker build -t ${{ env.FULL_IMAGE_NAME }}:$version -f Dockerfile .
+          buildah build -t ${{ env.FULL_IMAGE_NAME }}:$version -f Dockerfile .
         if: ${{ env.BUILD_OCI_WITH == 'buildah' }}
       - name: list buildah images available
         run: buildah images
