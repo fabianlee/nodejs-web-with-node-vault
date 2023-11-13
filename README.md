@@ -1,6 +1,6 @@
 # NodeJS Express web app using node-vault module to fetch secrets directly from HashiCorp Vault server
 
-This project is a NodeJS Express web application using the node-vault library to fetch secrets directly from a HashiCorp
+This project is a NodeJS Express web application using the [node-vault](https://github.com/nodevault/node-vault) library to fetch secrets directly from a HashiCorp
 Vault server.
 
 This code assumes the Vault Server uses the Kubernetes auth method, which means the NodeJS app should be deployed into a Kubernetes cluster running under a specific Kubernetes service account so it presents the correct JWT.
