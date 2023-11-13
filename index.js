@@ -5,13 +5,14 @@ const app = express()
 
 app.use(cors())
 
+// node-vault module, https://github.com/nodevault/node-vault
 process.env.DEBUG = 'node-vault';
 const vault = require("node-vault")({
   apiVersion: "v1",
   endpoint: process.env.VAULT_URI || "http://vault.vault.svc.cluster.local:8200"
 });
 
-// full path to kv2 Vault secret
+// full path to Vault secret, '/data' needs to be inserted for kv2 engine
 const fullSecretPath = (process.env.VAULT_BACKEND || "secret") + "/" + 
     "data/" +
     (process.env.VAULT_CONTEXT || "webapp") + "/" +
@@ -22,7 +23,7 @@ console.log("vault role: " + vaultRole);
 
 const JWT_TOKEN_FILE="/var/run/secrets/kubernetes.io/serviceaccount/token";
 
-// use JWT token of Kubernetes Service Account to auth to Vault server
+// use JWT token of Kubernetes Service Account for auth to Vault server
 async function doVaultLogin() {
   var fs = require('fs');
   const jwt = fs.readFileSync(JWT_TOKEN_FILE);
