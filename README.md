@@ -12,7 +12,7 @@ This app can fetch a secret from a remote or in-cluster Vault server without the
 
 ## Adding Vault sidecar
 
-Even though the node-vault modules allow a NodeJS application to fetch secrets directly from a Vault server, there are a multiple reasons you may want still to run a Vault sidecar:
+Even though the node-vault modules allow a NodeJS application to fetch secrets directly from a Vault server, there are multiple reasons you may want still to run a Vault sidecar:
 
 * Your particular app language does not have a fully-featured Vault client library
 * You want to shield your application from Vault server configuration details
