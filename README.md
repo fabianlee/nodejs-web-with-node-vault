@@ -21,7 +21,7 @@ Even though the node-vault modules allow a NodeJS application to fetch secrets d
 This project supports pointing at the Vault sidecar as well, http://localhost:8082
 
 
-## Create OCI image with Docker
+## Creating OCI image with Docker manually
 
 ```
 sudo apt install -y npm
