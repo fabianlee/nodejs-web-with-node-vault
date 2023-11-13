@@ -10,7 +10,7 @@ This code assumes the Vault Server uses the Kubernetes auth method, which means 
 This app can fetch a secret from a remote or in-cluster Vault server without the need for a Vault sidecar by using the node-vault module. Generally, it is preferrable to communicate direcly to Vault so no intermediate secret representations are stored.
 
 
-## Adding Vault sidecar
+## (Optional) Vault sidecar
 
 Even though the node-vault modules allow a NodeJS application to fetch secrets directly from a Vault server, there are multiple reasons you may want still to run a Vault sidecar:
 
