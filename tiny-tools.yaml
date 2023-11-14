@@ -43,7 +43,7 @@ spec:
           limits:
             memory: "256Mi"
         env:
-        # externalized variables used in Spring application.properties
+        # externalized variables used in NodeJS index.js
         - name: VAULT_URI
           value: $vault_uri
         - name: VAULT_BACKEND
