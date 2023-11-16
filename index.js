@@ -25,9 +25,9 @@ const JWT_TOKEN_FILE="/var/run/secrets/kubernetes.io/serviceaccount/token";
 
 // use JWT token of Kubernetes Service Account for auth to Vault server
 async function doVaultLogin() {
-  // read token file, avoid caching https://nodejs.org/api/fs.html#file-system-flags
+  // read token file
   var fs = require('fs');
-  const jwt = fs.readFileSync(JWT_TOKEN_FILE); //, {"flag":"r"});
+  const jwt = fs.readFileSync(JWT_TOKEN_FILE);
   console.log("JWT length: " + jwt.toString().length);
 
   // attempt kubernetes authentication, TokenReview
