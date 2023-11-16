@@ -29,11 +29,11 @@ sudo apt install -y npm
 npm init -y
 npm install express cors node-vault
 
+# if you want to test basic syntax locally
+node --check index.js
+
 # builds 'latest' image and pushes to DockerHub
 ./docker-build.sh
-
-# if you want to test basic syntax
-node index.js
 ```
 
 # Creating tag, which runs GitHub Action to build image and upload

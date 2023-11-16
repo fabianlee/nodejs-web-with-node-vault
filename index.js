@@ -25,8 +25,9 @@ const JWT_TOKEN_FILE="/var/run/secrets/kubernetes.io/serviceaccount/token";
 
 // use JWT token of Kubernetes Service Account for auth to Vault server
 async function doVaultLogin() {
+  // read token file, avoid caching https://nodejs.org/api/fs.html#file-system-flags
   var fs = require('fs');
-  const jwt = fs.readFileSync(JWT_TOKEN_FILE);
+  const jwt = fs.readFileSync(JWT_TOKEN_FILE); //, {"flag":"r"});
   console.log("JWT length: " + jwt.toString().length);
 
   // attempt kubernetes authentication, TokenReview
@@ -55,8 +56,18 @@ app.get('/', (req, res) => {
 app.get('/secret', async (req,res) => {
   //fullContextPath = req.baseUrl + req.path;
 
-  // pull Vault secret
-  let secret = await vault.read(fullSecretPath);
+  // fetch Vault secret
+  let secret = null;
+  try {
+    secret = await vault.read(fullSecretPath);
+  }catch(e) {
+    if (e.response && e.response.statusCode==403) {
+      console.log("Got ApiResponseError with 403 code, assuming Vault token expiration, attempting refresh");
+      await doVaultLogin();
+      secret = await vault.read(fullSecretPath);
+    }
+  }
+
   if (secret!=null) {
     console.log(secret.data.data);
   }else {
